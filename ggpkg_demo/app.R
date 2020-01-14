@@ -9,6 +9,11 @@ discrete_vars <- setdiff(all_vars, numeric_vars)
 
 # Define the user interface
 ui <- fluidPage(
+    # these are to make the styles in the app align with the
+    # styles in the presentation
+    includeCSS("remark-css/default.css"),
+    includeCSS("remark-css/default-fonts.css"),
+    includeCSS("styles.css"),
     
     verticalLayout(
         
@@ -27,8 +32,9 @@ ui <- fluidPage(
                 
             )
         ),
-
-        plotOutput("plot")
+        
+        # height is an attempt to align styles to presentation
+        plotOutput("plot", height = "5in")
     )
 )
 
@@ -52,7 +58,8 @@ server <- function(input, output) {
             geom_point(mapping) +
             facet +
             labs(colour = input$colour_var)
-    })
+        
+    }, res = 120) # res is an attempt to align font size to presentation
 }
 
 # Run the application 

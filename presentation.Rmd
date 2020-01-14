@@ -7,6 +7,7 @@ date: "2020-01-30"
 output:
   xaringan::moon_reader:
     lib_dir: libs
+    css: [default, default-fonts, styles.css]
     nature:
       highlightStyle: github
       highlightLines: true
@@ -18,6 +19,8 @@ library(ggplot2)
 options(htmltools.dir.version = FALSE)
 knitr::opts_chunk$set(echo = TRUE, dpi = 300, fig.height = 4)
 ```
+
+Some regular text
 
 ```{r}
 library(ggplot2)
