@@ -1,0 +1,44 @@
+---
+title: "Best practices for programming with ggplot2"
+subtitle: "⚔<br/>with xaringan"
+author: "Dewey Dunnington"
+institute: "Dalhousie University"
+date: "2020-01-30"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+library(ggplot2)
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(echo = TRUE, dpi = 300, fig.height = 4)
+```
+
+```{r}
+library(ggplot2)
+ggplot(mpg) +
+  geom_point(aes(displ, hwy, colour = class)) +
+  facet_wrap(vars(manufacturer))
+```
+
+---
+
+<!-- doesn't work in the demo but works in other browsers -->
+<iframe class="shinyapp" src="https://paleolimbot.shinyapps.io/ggpkg_demo/"></iframe>
+
+---
+class: center, middle
+
+# xaringan
+
+### /ʃaː.'riŋ.ɡan/
+
+---
+class: inverse, center, middle
+
+# Get Started
