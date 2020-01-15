@@ -7,6 +7,8 @@ all_vars <- colnames(mpg)
 numeric_vars <- all_vars[vapply(mpg, is.numeric, logical(1))]
 discrete_vars <- setdiff(all_vars, numeric_vars)
 
+theme_set(theme_gray(9))
+
 # Define the user interface
 ui <- fluidPage(
     # these are to make the styles in the app align with the
@@ -34,7 +36,7 @@ ui <- fluidPage(
         ),
         
         # height is an attempt to align styles to presentation
-        plotOutput("plot", height = "5in")
+        plotOutput("plot", height = "4.5in")
     )
 )
 
@@ -59,7 +61,7 @@ server <- function(input, output) {
             facet +
             labs(colour = input$colour_var)
         
-    }, res = 120) # res is an attempt to align font size to presentation
+    }, res = 120) # trying to replicate the settings of the presentation
 }
 
 # Run the application 

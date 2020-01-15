@@ -16,11 +16,12 @@ output:
 
 ```{r setup, include=FALSE}
 library(ggplot2)
+
+input <- list(colour_var = "class", facet_var = "manufacturer")
+
 options(htmltools.dir.version = FALSE)
 knitr::opts_chunk$set(echo = TRUE, dpi = 300, fig.height = 4)
 ```
-
-Some regular text
 
 ```{r}
 library(ggplot2)
@@ -30,16 +31,209 @@ ggplot(mpg) +
 ```
 
 ---
+class: center, middle, inverse
+
+# Using ggplot2 in Shiny
+
+---
 
 <!-- doesn't work in the demo but works in other browsers -->
 <iframe class="shinyapp" src="https://paleolimbot.shinyapps.io/ggpkg_demo/"></iframe>
 
 ---
-class: center, middle
 
-# xaringan
+# Programming with ggplot2
 
-### /ʃaː.'riŋ.ɡan/
+Shiny `selectInput()` values are character vectors:
+
+```{r}
+colour_var <- "class"
+facet_var <- "manufacturer"
+```
+
+Mappings and facet specifications use non-standard evaluation:
+
+```{r}
+ggplot(mpg) +
+  geom_point(aes(displ, hwy, colour = class)) +
+  facet_wrap(vars(manufacturer))
+```
+
+---
+
+# Programming with ggplot2
+
+Shiny `selectInput()` values are character vectors:
+
+```{r}
+colour_var <- "class"
+facet_var <- "manufacturer"
+```
+
+Mappings and facet specifications use non-standard evaluation:
+
+```{r}
+ggplot(mpg) +
+  geom_point(aes(displ, hwy, colour = !!sym(colour_var))) +
+  facet_wrap(vars(!!sym(facet_var)))
+```
+
+---
+
+# Programming with ggplot2
+
+```{r}
+plot_mpg <- function(colour_var, facet_var) {
+  ggplot(mpg) +
+    geom_point(aes(displ, hwy, colour = !!sym(colour_var))) +
+    facet_wrap(vars(!!sym(facet_var)))
+}
+
+plot_mpg("class", "manufacturer")
+```
+
+---
+
+# Programming with ggplot2
+
+```{r, error=TRUE}
+plot_mpg <- function(colour_var, facet_var) {
+  ggplot(mpg) +
+    geom_point(aes(displ, hwy, colour = !!sym(colour_var))) +
+    facet_wrap(vars(!!sym(facet_var)))
+}
+
+plot_mpg("<none>", "manufacturer")
+```
+
+---
+
+# Programming with ggplot2
+
+```{r, error=TRUE}
+plot_mpg <- function(colour_var, facet_var) {
+  colour_mapping <- sym(colour_var)
+  
+  ggplot(mpg) +
+    geom_point(aes(displ, hwy, colour = !!colour_mapping)) +
+    facet_wrap(vars(!!sym(facet_var)))
+}
+
+plot_mpg("<none>", "manufacturer")
+```
+
+---
+
+# Programming with ggplot2
+
+```{r}
+plot_mpg <- function(colour_var, facet_var) {
+  if (colour_var != "<none>") {
+    colour_mapping <- sym(colour_var)
+  } else {
+    colour_mapping <- NULL
+  }
+  
+  ggplot(mpg) +
+    geom_point(aes(displ, hwy, colour = !!colour_mapping)) +
+    facet_wrap(vars(!!sym(facet_var)))
+}
+
+plot_mpg("<none>", "manufacturer")
+```
+
+---
+
+# Programming with ggplot2
+
+```{r, error = TRUE}
+plot_mpg <- function(colour_var, facet_var) {
+  if (colour_var != "<none>") {
+    colour_mapping <- sym(colour_var)
+  } else {
+    colour_mapping <- NULL
+  }
+  
+  ggplot(mpg) +
+    geom_point(aes(displ, hwy, colour = !!colour_mapping)) +
+    facet_wrap(vars(!!sym(facet_var)))
+}
+
+plot_mpg("<none>", "<none>")
+```
+
+---
+
+# Programming with ggplot2
+
+```{r, error = TRUE}
+plot_mpg <- function(colour_var, facet_var) {
+  if (colour_var != "<none>") {
+    colour_mapping <- sym(colour_var)
+  } else {
+    colour_mapping <- NULL
+  }
+  
+  facet <- facet_wrap(vars(!!sym(facet_var)))
+  
+  ggplot(mpg) +
+    geom_point(aes(displ, hwy, colour = !!colour_mapping)) +
+    facet
+}
+
+plot_mpg("<none>", "<none>")
+```
+
+---
+
+# Programming with ggplot2
+
+```{r, error = TRUE}
+plot_mpg <- function(colour_var, facet_var) {
+  if (colour_var != "<none>") {
+    colour_mapping <- sym(colour_var)
+  } else {
+    colour_mapping <- NULL
+  }
+  
+  if (facet_var != "<none>") {
+    facet <- facet_wrap(vars(!!sym(facet_var)))
+  } else {
+    facet <- NULL
+  }
+  
+  ggplot(mpg) +
+    geom_point(aes(displ, hwy, colour = !!colour_mapping)) +
+    facet
+}
+```
+
+---
+
+```{r}
+plot_mpg("<none>", "<none>")
+```
+
+---
+
+# Programming with ggplot2
+
+`aes(aesthetic = NULL)` is identical to `aes()`
+
+- Use to conditionally map a variable with minimal repeated code.
+
+`ggplot() + NULL` is identical to `ggplot()`
+
+- Use to conditionally add a layer/facet/scale to a plot
+
+`ggplot() + item1 + item2` is identical to `ggplot() + list(item1, item2)`
+
+- Use to conditinally add more than one item to a plot
+
+---
+class: center, middle, inverse
+
+# Using ggplot2 in packages
 
 ---
 class: inverse, center, middle
