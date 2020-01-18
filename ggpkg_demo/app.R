@@ -2,12 +2,35 @@
 library(shiny)
 library(ggplot2)
 
+# ---- load data ----
+
 mpg <- ggplot2::mpg
 all_vars <- colnames(mpg)
 numeric_vars <- all_vars[vapply(mpg, is.numeric, logical(1))]
 discrete_vars <- setdiff(all_vars, numeric_vars)
 
 theme_set(theme_gray(9))
+
+# function that takes plot options as strings
+plot_mpg <- function(colour_var, facet_var) {
+    if (colour_var != "<none>") {
+        colour_mapping <- sym(colour_var)
+    } else {
+        colour_mapping <- NULL
+    }
+    
+    if (facet_var != "<none>") {
+        facet <- facet_wrap(vars(!!sym(facet_var)))
+    } else {
+        facet <- NULL
+    }
+    
+    ggplot(mpg) +
+        geom_point(aes(displ, hwy, colour = !!colour_mapping)) +
+        facet
+}
+
+# ---- define Shiny app ----
 
 # Define the user interface
 ui <- fluidPage(
@@ -44,25 +67,11 @@ ui <- fluidPage(
 server <- function(input, output) {
 
     output$plot <- renderPlot({
-        if (input$facet_var != "<none>") {
-            facet <- facet_wrap(vars(.data[[input$facet_var]]))
-        } else {
-            facet <- NULL
-        }
-        
-        if (input$colour_var != "<none>") {
-            mapping <- aes(colour = .data[[input$colour_var]])
-        } else {
-            mapping <- NULL
-        }
-        
-        ggplot(mpg, aes(displ, hwy)) +
-            geom_point(mapping) +
-            facet +
-            labs(colour = input$colour_var)
-        
+        plot_mpg(input$colour_var, input$facet_var)
     }, res = 120) # trying to replicate the settings of the presentation
 }
+
+# ---- run Shiny app ----
 
 # Run the application 
 shinyApp(ui = ui, server = server)

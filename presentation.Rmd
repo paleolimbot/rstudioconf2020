@@ -221,6 +221,7 @@ plot_mpg("<none>", "<none>")
 `aes(aesthetic = NULL)` is identical to `aes()`
 
 - Use to conditionally map a variable with minimal repeated code.
+- Use `!!sym("column name as string")` to convert a string to an expression that can be used within `aes()`.
 
 `ggplot() + NULL` is identical to `ggplot()`
 
@@ -230,12 +231,41 @@ plot_mpg("<none>", "<none>")
 
 - Use to conditinally add more than one item to a plot
 
+If you need more than one `ggplot()` call in a function, it's a good indication that you need more than one function.
+
 ---
 class: center, middle, inverse
 
 # Using ggplot2 in packages
 
 ---
-class: inverse, center, middle
 
-# Get Started
+# Introducing...the {plotmpg} package!
+
+```r
+# install.packages("plotmpg")
+library(plotmpg)
+plot_mpg("class", "manufacturer")
+```
+
+```{r, echo=FALSE}
+plot_mpg("class", "manufacturer")
+```
+
+---
+
+# Using ggplot2 in packages
+
+Functions in a package will be used by more than just you:
+
+- Export a function that returns data in a form suitable for use in ggplot2 in addition to (or in place of!) a plot function
+
+Explicit namespacing (no `library()` calls):
+
+- Use roxygen `#' @importFrom ggplot2 <function name>` or explicit namespacing (e.g., `ggplot2::<function_name>()`)
+- Datasets require explicit namespacing (e.g., `ggplot2::mpg`)
+- Infix functions require importing (e.g., `#' @importFrom ggplot2 %+replace%` or assignment (e.g., `` `%+replace%` <- ggplot2::`%+replace%` ``)
+
+R CMD check: no undefined variables:
+
+- Use the `.data` pronoun and `#' @importFrom rlang .data` (e.g., `aes(.data$displ, .data$hwy)`))
