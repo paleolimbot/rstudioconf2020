@@ -28,7 +28,7 @@ plot_mpg_string <- function(colour_var = NULL, facet_var = NULL) {
     facet <- NULL
   }
 
-  ggplot(mpg_data()) +
+  ggplot(ggplot2::mpg) +
     geom_point(aes(.data$displ, .data$hwy, colour = !!colour_mapping)) +
     facet +
     labs(x = "displ", y = "hwy")

@@ -12,7 +12,7 @@ discrete_vars <- setdiff(all_vars, numeric_vars)
 theme_set(theme_gray(9))
 
 # function that takes plot options as strings
-plot_mpg <- function(colour_var, facet_var) {
+plot_mpg_string <- function(colour_var, facet_var) {
     if (colour_var != "<none>") {
         colour_mapping <- sym(colour_var)
     } else {
@@ -67,7 +67,7 @@ ui <- fluidPage(
 server <- function(input, output) {
 
     output$plot <- renderPlot({
-        plot_mpg(input$colour_var, input$facet_var)
+        plot_mpg_string(input$colour_var, input$facet_var)
     }, res = 120) # trying to replicate the settings of the presentation
 }
 

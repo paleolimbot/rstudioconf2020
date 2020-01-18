@@ -1,9 +1,7 @@
 ---
 title: "Best practices for programming with ggplot2"
-subtitle: "⚔<br/>with xaringan"
-author: "Dewey Dunnington"
-institute: "Dalhousie University"
-date: "2020-01-30"
+subtitle: '<img src="images/ggplot2.png" style="width: 200px" />'
+author: "Dewey Dunnington (@paleolimbot)"
 output:
   xaringan::moon_reader:
     lib_dir: libs
@@ -83,13 +81,13 @@ ggplot(mpg) +
 # Programming with ggplot2
 
 ```{r}
-plot_mpg <- function(colour_var, facet_var) {
+plot_mpg_string <- function(colour_var, facet_var) {
   ggplot(mpg) +
     geom_point(aes(displ, hwy, colour = !!sym(colour_var))) +
     facet_wrap(vars(!!sym(facet_var)))
 }
 
-plot_mpg("class", "manufacturer")
+plot_mpg_string("class", "manufacturer")
 ```
 
 ---
@@ -97,13 +95,13 @@ plot_mpg("class", "manufacturer")
 # Programming with ggplot2
 
 ```{r, error=TRUE}
-plot_mpg <- function(colour_var, facet_var) {
+plot_mpg_string <- function(colour_var, facet_var) {
   ggplot(mpg) +
     geom_point(aes(displ, hwy, colour = !!sym(colour_var))) +
     facet_wrap(vars(!!sym(facet_var)))
 }
 
-plot_mpg("<none>", "manufacturer")
+plot_mpg_string("<none>", "manufacturer")
 ```
 
 ---
@@ -111,7 +109,7 @@ plot_mpg("<none>", "manufacturer")
 # Programming with ggplot2
 
 ```{r, error=TRUE}
-plot_mpg <- function(colour_var, facet_var) {
+plot_mpg_string <- function(colour_var, facet_var) {
   colour_mapping <- sym(colour_var)
   
   ggplot(mpg) +
@@ -119,7 +117,7 @@ plot_mpg <- function(colour_var, facet_var) {
     facet_wrap(vars(!!sym(facet_var)))
 }
 
-plot_mpg("<none>", "manufacturer")
+plot_mpg_string("<none>", "manufacturer")
 ```
 
 ---
@@ -127,7 +125,7 @@ plot_mpg("<none>", "manufacturer")
 # Programming with ggplot2
 
 ```{r}
-plot_mpg <- function(colour_var, facet_var) {
+plot_mpg_string <- function(colour_var, facet_var) {
   if (colour_var != "<none>") {
     colour_mapping <- sym(colour_var)
   } else {
@@ -139,7 +137,7 @@ plot_mpg <- function(colour_var, facet_var) {
     facet_wrap(vars(!!sym(facet_var)))
 }
 
-plot_mpg("<none>", "manufacturer")
+plot_mpg_string("<none>", "manufacturer")
 ```
 
 ---
@@ -147,7 +145,7 @@ plot_mpg("<none>", "manufacturer")
 # Programming with ggplot2
 
 ```{r, error = TRUE}
-plot_mpg <- function(colour_var, facet_var) {
+plot_mpg_string <- function(colour_var, facet_var) {
   if (colour_var != "<none>") {
     colour_mapping <- sym(colour_var)
   } else {
@@ -159,7 +157,7 @@ plot_mpg <- function(colour_var, facet_var) {
     facet_wrap(vars(!!sym(facet_var)))
 }
 
-plot_mpg("<none>", "<none>")
+plot_mpg_string("<none>", "<none>")
 ```
 
 ---
@@ -167,7 +165,7 @@ plot_mpg("<none>", "<none>")
 # Programming with ggplot2
 
 ```{r, error = TRUE}
-plot_mpg <- function(colour_var, facet_var) {
+plot_mpg_string <- function(colour_var, facet_var) {
   if (colour_var != "<none>") {
     colour_mapping <- sym(colour_var)
   } else {
@@ -181,15 +179,15 @@ plot_mpg <- function(colour_var, facet_var) {
     facet
 }
 
-plot_mpg("<none>", "<none>")
+plot_mpg_string("<none>", "<none>")
 ```
 
 ---
 
 # Programming with ggplot2
 
-```{r, error = TRUE}
-plot_mpg <- function(colour_var, facet_var) {
+```{r}
+plot_mpg_string <- function(colour_var, facet_var) {
   if (colour_var != "<none>") {
     colour_mapping <- sym(colour_var)
   } else {
@@ -211,7 +209,7 @@ plot_mpg <- function(colour_var, facet_var) {
 ---
 
 ```{r}
-plot_mpg("<none>", "<none>")
+plot_mpg_string("<none>", "<none>")
 ```
 
 ---
@@ -242,14 +240,14 @@ class: center, middle, inverse
 
 # Introducing...the {plotmpg} package!
 
-```r
-# install.packages("plotmpg")
-library(plotmpg)
-plot_mpg("class", "manufacturer")
+```{r, include=FALSE}
+rm(plot_mpg_string)
 ```
 
-```{r, echo=FALSE}
-plot_mpg("class", "manufacturer")
+
+```{r}
+library(plotmpg)
+plot_mpg_string("class", "manufacturer")
 ```
 
 ---
@@ -264,8 +262,205 @@ Explicit namespacing (no `library()` calls):
 
 - Use roxygen `#' @importFrom ggplot2 <function name>` or explicit namespacing (e.g., `ggplot2::<function_name>()`)
 - Datasets require explicit namespacing (e.g., `ggplot2::mpg`)
-- Infix functions require importing (e.g., `#' @importFrom ggplot2 %+replace%` or assignment (e.g., `` `%+replace%` <- ggplot2::`%+replace%` ``)
+- Infix functions require importing (e.g., `#' @importFrom ggplot2 %+replace%` or assignment
+
+``` r
+`%+replace%` <- ggplot2::`%+replace%`
+```
 
 R CMD check: no undefined variables:
 
 - Use the `.data` pronoun and `#' @importFrom rlang .data` (e.g., `aes(.data$displ, .data$hwy)`))
+
+---
+
+# Using ggplot2 in packages: namespacing
+
+```{r}
+#'
+#'
+plot_mpg_string <- function(colour_var, facet_var) {
+  if (colour_var != "<none>") {
+    colour_mapping <- sym(colour_var)
+  } else {
+    colour_mapping <- NULL
+  }
+  
+  if (facet_var != "<none>") {
+    facet <- facet_wrap(vars(!!sym(facet_var)))
+  } else {
+    facet <- NULL
+  }
+  
+  ggplot(mpg) +
+    geom_point(aes(displ, hwy, colour = !!colour_mapping)) +
+    facet
+}
+```
+
+---
+
+# Using ggplot2 in packages: namespacing
+
+```{r}
+#' @importFrom ggplot2 ggplot aes vars facet_wrap geom_point labs
+#' @importFrom rlang sym
+plot_mpg_string <- function(colour_var, facet_var) {
+  if (colour_var != "<none>") {
+    colour_mapping <- sym(colour_var)
+  } else {
+    colour_mapping <- NULL
+  }
+  
+  if (facet_var != "<none>") {
+    facet <- facet_wrap(vars(!!sym(facet_var)))
+  } else {
+    facet <- NULL
+  }
+  
+  ggplot(ggplot2::mpg) +
+    geom_point(aes(displ, hwy, colour = !!colour_mapping)) +
+    facet
+}
+```
+
+---
+
+# Using ggplot2 in packages: undefined variables
+
+```
+── R CMD check results ──────────── plotmpg 0.0.0.9000 ────
+Duration: 25.2s
+
+> checking R code for possible problems ... NOTE
+  plot_mpg_string: no visible binding for global variable ‘displ’
+  plot_mpg_string: no visible binding for global variable ‘hwy’
+  Undefined global functions or variables:
+    displ hwy
+
+0 errors ✓ | 0 warnings ✓ | 1 note x
+```
+
+---
+
+# Using ggplot2 in packages: undefined variables
+
+```{r}
+#' @importFrom ggplot2 ggplot aes vars facet_wrap geom_point labs
+#' @importFrom rlang sym
+plot_mpg_string <- function(colour_var, facet_var) {
+  if (colour_var != "<none>") {
+    colour_mapping <- sym(colour_var)
+  } else {
+    colour_mapping <- NULL
+  }
+  
+  if (facet_var != "<none>") {
+    facet <- facet_wrap(vars(!!sym(facet_var)))
+  } else {
+    facet <- NULL
+  }
+  
+  ggplot(ggplot2::mpg) +
+    geom_point(aes(displ, hwy, colour = !!colour_mapping)) +
+    facet
+}
+```
+
+---
+
+# Using ggplot2 in packages: undefined variables
+
+```{r}
+#' @importFrom ggplot2 ggplot aes vars facet_wrap geom_point labs
+#' @importFrom rlang sym .data
+plot_mpg_string <- function(colour_var, facet_var) {
+  if (colour_var != "<none>") {
+    colour_mapping <- sym(colour_var)
+  } else {
+    colour_mapping <- NULL
+  }
+  
+  if (facet_var != "<none>") {
+    facet <- facet_wrap(vars(!!sym(facet_var)))
+  } else {
+    facet <- NULL
+  }
+  
+  ggplot(ggplot2::mpg) +
+    geom_point(aes(.data$displ, .data$hwy, colour = !!colour_mapping)) +
+    facet
+}
+```
+
+---
+
+# Using ggplot2 in packages: undefined variables
+
+```
+── R CMD check results ──────────── plotmpg 0.0.0.9000 ────
+Duration: 26.8s
+
+0 errors ✓ | 0 warnings ✓ | 0 notes ✓
+```
+
+---
+
+# Using ggplot2 in packages: testing
+
+Set up testing, install [vdiffr](http://vdiffr.r-lib.org/):
+
+``` r
+# install.packages("vdiffr")
+usethis::use_test("plot-mpg-string")
+usethis::use_package("vdiffr", "Suggests")
+```
+
+``` r
+# currently, vdiffr requires a context at the top of each file
+context("test-plot-mpg-string")
+
+test_that("plot_mpg_string() works", {
+  vdiffr::expect_doppelganger(
+    "plot_mpg_string(), defaults",
+    plot_mpg_string()
+  )
+})
+```
+
+---
+
+# Using ggplot2 in packages: testing
+
+``` r
+vdiffr::manage_cases()
+## Running testthat to collect visual cases
+## 
+##   N = New visual case
+##   X = Failed doppelganger
+##   o = Successful doppelganger
+## 
+## N
+## Loading required package: shiny
+## 
+## Listening on http://127.0.0.1:4164
+```
+
+---
+
+# Using ggplot2 in packages: testing
+
+![vdiffr shiny app](images/vdiffr-shiny.png)
+
+---
+class: center, middle
+
+# Best practices for programming with ggplot2
+
+<img src="images/ggplot2.png" style="width: 200px" />
+
+Slides: [fishandwhistle.net/slides/rstudioconf2020](https://fishandwhistle.net/slides/rstudioconf2020)
+
+Code: [github.com/paleolimbot/rstudioconf2020](https://github.com/paleolimbot/rstudioconf2020)
+
+@paleolimbot on [Twitter](https://twitter.com/paleolimbot) and [GitHub](https://github.com/paleolimbot)
