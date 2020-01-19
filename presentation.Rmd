@@ -227,7 +227,7 @@ plot_mpg_string("<none>", "<none>")
 
 `ggplot() + item1 + item2` is identical to `ggplot() + list(item1, item2)`
 
-- Use to conditinally add more than one item to a plot
+- Use to conditionally add more than one item to a plot
 
 If you need more than one `ggplot()` call in a function, it's a good indication that you need more than one function.
 
