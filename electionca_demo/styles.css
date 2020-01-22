@@ -1,0 +1,9 @@
+
+.container-fluid {
+  font-size: 18px;
+}
+
+.row .col-sm-12 {
+  padding-left: 0;
+  padding-right: 0;
+}
