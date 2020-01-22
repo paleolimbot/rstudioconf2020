@@ -17,3 +17,7 @@
 .footnote p {
   margin-bottom: 12px;
 }
+
+.hidden {
+  opacity: 0;
+}
