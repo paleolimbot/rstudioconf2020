@@ -15,11 +15,11 @@ test_that("plot_mpg() works", {
 
   vdiffr::expect_doppelganger(
     "plot_mpg() with colour var",
-    plot_mpg(colour_var = class)
+    plot_mpg(colour_var = "class")
   )
 
   vdiffr::expect_doppelganger(
     "plot_mpg() with facet var",
-    plot_mpg(facet_var = class)
+    plot_mpg(facet_var = "class")
   )
 })
