@@ -265,25 +265,6 @@ plot_mpg("class", NULL)
 ```
 
 ---
-
-# Programming with ggplot2:
-
-`aes(aesthetic = NULL)` is identical to `aes()`
-
-- Use to conditionally map a variable with minimal repeated code.
-- Use `!!sym("column name as string")` to convert a string to an expression that can be used within `aes()`.
-
-`ggplot() + NULL` is identical to `ggplot()`
-
-- Use to conditionally add a layer/facet/scale to a plot
-
-`ggplot() + item1 + item2` is identical to `ggplot() + list(item1, item2)`
-
-- Use to conditionally add more than one item to a plot
-
-If you need more than one `ggplot()` call in a function, it's a good indication that you need more than one function.
-
----
 class: center, middle, inverse
 
 # Use <br/><br/> `.data[["variable_name"]]` <br/><br/> within <br/><br/> `aes()` and/or `vars()`
@@ -512,6 +493,13 @@ class: center, middle, inverse
 class: center, middle, inverse
 
 # Test using {vdiffr}!
+
+---
+
+Data from the [electionca](https://paleolimbot.github.io/electionca) package/Library of Parliament
+
+<!-- doesn't work in the demo but works in other browsers -->
+<iframe class="shinyapp" src="https://paleolimbot.shinyapps.io/electionca_demo/"></iframe>
 
 ---
 class: center, middle
