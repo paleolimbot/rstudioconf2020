@@ -53,7 +53,8 @@ server <- function(input, output) {
             fill_var = fill_var,
             facet_var = facet_var,
             position = input$position
-        )
+        ) +
+            theme(legend.position = "right")
     }, res = 120) # trying to replicate the settings of the presentation
 }
 

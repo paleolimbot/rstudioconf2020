@@ -14,7 +14,7 @@
 #' plot_mpg("class", "manufacturer")
 #'
 #' @importFrom ggplot2 ggplot aes vars facet_wrap geom_point labs
-#' @importFrom rlang .data sym
+#' @importFrom rlang .data
 plot_mpg <- function(colour_var = NULL, facet_var = NULL) {
   mapping <- aes(.data$displ, .data$hwy, colour = .data[[colour_var]])
 

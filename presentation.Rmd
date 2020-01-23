@@ -17,10 +17,8 @@ class: center, middle, inverse
 ```{r setup, include=FALSE}
 library(ggplot2)
 
-input <- list(colour_var = "class", facet_var = "manufacturer")
-
 options(htmltools.dir.version = FALSE)
-knitr::opts_chunk$set(echo = TRUE, dpi = 300, fig.height = 4)
+knitr::opts_chunk$set(echo = TRUE, dpi = 300, fig.height = 2)
 ```
 
 # It all started with a reverse dependency check...
@@ -60,7 +58,7 @@ class: center, middle, inverse
 library(ggplot2)
 ggplot(mpg) +
   geom_point(aes(displ, hwy, colour = class)) +
-  facet_wrap(vars(manufacturer))
+  facet_wrap(vars(drv))
 ```
 
 ---
@@ -69,7 +67,7 @@ ggplot(mpg) +
 
 ```{r}
 colour_var <- "class"
-facet_var <- "manufacturer"
+facet_var <- "drv"
 ```
 
 ---
@@ -78,7 +76,7 @@ facet_var <- "manufacturer"
 
 ```{r}
 colour_var <- "class"
-facet_var <- "manufacturer"
+facet_var <- "drv"
 ```
 
 Mappings and facet specifications use tidy evaluation:
@@ -86,7 +84,7 @@ Mappings and facet specifications use tidy evaluation:
 ```{r, fig.show='hide'}
 ggplot(mpg) +
   geom_point(aes(displ, hwy, colour = class)) +
-  facet_wrap(vars(manufacturer))
+  facet_wrap(vars(drv))
 ```
 
 ---
@@ -95,7 +93,7 @@ ggplot(mpg) +
 
 ```{r}
 colour_var <- "class"
-facet_var <- "manufacturer"
+facet_var <- "drv"
 ```
 
 Mappings and facet specifications use tidy evaluation:
@@ -122,7 +120,7 @@ Mappings and facet specifications use tidy evaluation:
 ]
 
 ```{r}
-plot_mpg_string <- function(colour_var, facet_var) {
+plot_mpg <- function(colour_var = "class", facet_var = "drv") {
   ggplot(mpg) +
     geom_point(aes(displ, hwy, colour = .data[[colour_var]])) +
     facet_wrap(vars(.data[[facet_var]]))
@@ -134,7 +132,7 @@ plot_mpg_string <- function(colour_var, facet_var) {
 # Programming with ggplot2
 
 ```{r}
-plot_mpg_string("class", "manufacturer")
+plot_mpg("class", "drv")
 ```
 
 ---
@@ -142,13 +140,13 @@ plot_mpg_string("class", "manufacturer")
 # Programming with ggplot2
 
 ```{r, error=TRUE}
-plot_mpg_string <- function(colour_var, facet_var) {
+plot_mpg <- function(colour_var = "class", facet_var = "drv") {
   ggplot(mpg) +
     geom_point(aes(displ, hwy, colour = .data[[colour_var]])) +
     facet_wrap(vars(.data[[facet_var]]))
 }
 
-plot_mpg_string(NULL, "manufacturer")
+plot_mpg(NULL, "drv")
 ```
 
 ---
@@ -156,7 +154,7 @@ plot_mpg_string(NULL, "manufacturer")
 # Programming with ggplot2
 
 ```{r, error=TRUE}
-plot_mpg_string <- function(colour_var, facet_var) {
+plot_mpg <- function(colour_var = "class", facet_var = "drv") {
   mapping <- aes(displ, hwy, colour = .data[[colour_var]])
   
   ggplot(mpg) +
@@ -164,25 +162,7 @@ plot_mpg_string <- function(colour_var, facet_var) {
     facet_wrap(vars(.data[[facet_var]]))
 }
 
-plot_mpg_string(NULL, "manufacturer")
-```
-
----
-
-# Programming with ggplot2
-
-```{r, fig.height=3}
-plot_mpg_string <- function(colour_var, facet_var) {
-  mapping <- aes(displ, hwy, colour = .data[[colour_var]])
-  
-  if (is.null(colour_var)) {
-    mapping$colour <- NULL
-  }
-  
-  ggplot(mpg) +
-    geom_point(mapping) +
-    facet_wrap(vars(.data[[facet_var]]))
-}
+plot_mpg(NULL, "drv")
 ```
 
 ---
@@ -190,16 +170,7 @@ plot_mpg_string <- function(colour_var, facet_var) {
 # Programming with ggplot2
 
 ```{r}
-plot_mpg_string(NULL, "manufacturer")
-```
-
-
----
-
-# Programming with ggplot2
-
-```{r, error = TRUE}
-plot_mpg_string <- function(colour_var, facet_var) {
+plot_mpg <- function(colour_var = "class", facet_var = "drv") {
   mapping <- aes(displ, hwy, colour = .data[[colour_var]])
   
   if (is.null(colour_var)) {
@@ -211,7 +182,28 @@ plot_mpg_string <- function(colour_var, facet_var) {
     facet_wrap(vars(.data[[facet_var]]))
 }
 
-plot_mpg_string(NULL, NULL)
+plot_mpg(NULL, "drv")
+```
+
+
+---
+
+# Programming with ggplot2
+
+```{r, error = TRUE}
+plot_mpg <- function(colour_var = "class", facet_var = "drv") {
+  mapping <- aes(displ, hwy, colour = .data[[colour_var]])
+  
+  if (is.null(colour_var)) {
+    mapping$colour <- NULL
+  }
+  
+  ggplot(mpg) +
+    geom_point(mapping) +
+    facet_wrap(vars(.data[[facet_var]]))
+}
+
+plot_mpg(NULL, NULL)
 ```
 
 ---
@@ -219,7 +211,7 @@ plot_mpg_string(NULL, NULL)
 # Programming with ggplot2
 
 ```{r, error = TRUE}
-plot_mpg_string <- function(colour_var, facet_var) {
+plot_mpg <- function(colour_var = "class", facet_var = "drv") {
   mapping <- aes(displ, hwy, colour = .data[[colour_var]])
   
   if (is.null(colour_var)) {
@@ -233,15 +225,15 @@ plot_mpg_string <- function(colour_var, facet_var) {
     facet
 }
 
-plot_mpg_string(NULL, NULL)
+plot_mpg(NULL, NULL)
 ```
 
 ---
 
 # Programming with ggplot2
 
-```{r, fig.show = 'hide'}
-plot_mpg_string <- function(colour_var, facet_var) {
+```{r}
+plot_mpg <- function(colour_var = "class", facet_var = "drv") {
   mapping <- aes(displ, hwy, colour = .data[[colour_var]])
   
   if (is.null(colour_var)) {
@@ -258,19 +250,23 @@ plot_mpg_string <- function(colour_var, facet_var) {
     geom_point(mapping) +
     facet
 }
-
-plot_mpg_string(NULL, NULL)
 ```
 
 ---
 
-```{r}
-plot_mpg_string(NULL, NULL)
+```{r, fig.height=5}
+plot_mpg(NULL, NULL)
 ```
 
 ---
 
-# Programming with ggplot2
+```{r, fig.height=5}
+plot_mpg("class", NULL)
+```
+
+---
+
+# Programming with ggplot2:
 
 `aes(aesthetic = NULL)` is identical to `aes()`
 
@@ -290,66 +286,60 @@ If you need more than one `ggplot()` call in a function, it's a good indication 
 ---
 class: center, middle, inverse
 
-# Using ggplot2 in packages
+# Use <br/><br/> `.data[["variable_name"]]` <br/><br/> within <br/><br/> `aes()` and/or `vars()`
+
+---
+class: center, middle, inverse
+
+# `ggplot(...) + NULL` <br/><br/> is identical to <br/><br/> `ggplot(...)` <br/><br/> Use it to conditinally add an item to a plot!
+
+---
+class: center, middle, inverse
+
+# `ggplot(...) + item1 + item2` <br/><br/> is identical to <br/><br/> `ggplot(...) + list(item1, item2)` <br/><br/> Use it to conditinally more than one item to a plot!
 
 ---
 
 # Introducing...the {plotmpg} package!
 
 ```{r, include=FALSE}
-rm(plot_mpg_string)
+rm(plot_mpg)
 ```
-
 
 ```{r}
 library(plotmpg)
-plot_mpg_string("class", "manufacturer")
+plot_mpg("class", "drv")
 ```
 
 ---
+class: center, middle, inverse
 
-# Using ggplot2 in packages
+# Does your package need a plot function?
 
-Functions in a package will be used by more than just you:
-
-- Export a function that returns data in a form suitable for use in ggplot2 in addition to (or in place of!) a plot function
-
-Explicit namespacing (no `library()` calls):
-
-- Use roxygen `#' @importFrom ggplot2 <function name>` or explicit namespacing (e.g., `ggplot2::<function_name>()`)
-- Datasets require explicit namespacing (e.g., `ggplot2::mpg`)
-- Infix functions require importing (e.g., `#' @importFrom ggplot2 %+replace%` or assignment
-
-``` r
-`%+replace%` <- ggplot2::`%+replace%`
-```
-
-R CMD check: no undefined variables:
-
-- Use the `.data` pronoun and `#' @importFrom rlang .data` (e.g., `aes(.data$displ, .data$hwy)`))
+# (consider documentation instead)
 
 ---
 
 # Using ggplot2 in packages: namespacing
 
 ```{r}
-#'
-#'
-plot_mpg_string <- function(colour_var, facet_var) {
-  if (colour_var != "<none>") {
-    colour_mapping <- sym(colour_var)
-  } else {
-    colour_mapping <- NULL
+
+
+plot_mpg <- function(colour_var = "class", facet_var = "drv") {
+  mapping <- aes(displ, hwy, colour = .data[[colour_var]])
+  
+  if (is.null(colour_var)) {
+    mapping$colour <- NULL
   }
   
-  if (facet_var != "<none>") {
-    facet <- facet_wrap(vars(!!sym(facet_var)))
-  } else {
+  if (is.null(facet_var)) {
     facet <- NULL
+  } else {
+    facet <- facet_wrap(vars(.data[[facet_var]]))
   }
   
   ggplot(mpg) +
-    geom_point(aes(displ, hwy, colour = !!colour_mapping)) +
+    geom_point(mapping) +
     facet
 }
 ```
@@ -360,22 +350,22 @@ plot_mpg_string <- function(colour_var, facet_var) {
 
 ```{r}
 #' @importFrom ggplot2 ggplot aes vars facet_wrap geom_point labs
-#' @importFrom rlang sym
-plot_mpg_string <- function(colour_var, facet_var) {
-  if (colour_var != "<none>") {
-    colour_mapping <- sym(colour_var)
-  } else {
-    colour_mapping <- NULL
+#' @importFrom rlang .data
+plot_mpg <- function(colour_var = "class", facet_var = "drv") {
+  mapping <- aes(displ, hwy, colour = .data[[colour_var]])
+  
+  if (is.null(colour_var)) {
+    mapping$colour <- NULL
   }
   
-  if (facet_var != "<none>") {
-    facet <- facet_wrap(vars(!!sym(facet_var)))
-  } else {
+  if (is.null(facet_var)) {
     facet <- NULL
+  } else {
+    facet <- facet_wrap(vars(.data[[facet_var]]))
   }
   
   ggplot(ggplot2::mpg) +
-    geom_point(aes(displ, hwy, colour = !!colour_mapping)) +
+    geom_point(mapping) +
     facet
 }
 ```
@@ -389,8 +379,8 @@ plot_mpg_string <- function(colour_var, facet_var) {
 Duration: 25.2s
 
 > checking R code for possible problems ... NOTE
-  plot_mpg_string: no visible binding for global variable ‘displ’
-  plot_mpg_string: no visible binding for global variable ‘hwy’
+  plot_mpg: no visible binding for global variable ‘displ’
+  plot_mpg: no visible binding for global variable ‘hwy’
   Undefined global functions or variables:
     displ hwy
 
@@ -403,22 +393,22 @@ Duration: 25.2s
 
 ```{r}
 #' @importFrom ggplot2 ggplot aes vars facet_wrap geom_point labs
-#' @importFrom rlang sym
-plot_mpg_string <- function(colour_var, facet_var) {
-  if (colour_var != "<none>") {
-    colour_mapping <- sym(colour_var)
-  } else {
-    colour_mapping <- NULL
+#' @importFrom rlang .data
+plot_mpg <- function(colour_var = "class", facet_var = "drv") {
+  mapping <- aes(displ, hwy, colour = .data[[colour_var]])
+  
+  if (is.null(colour_var)) {
+    mapping$colour <- NULL
   }
   
-  if (facet_var != "<none>") {
-    facet <- facet_wrap(vars(!!sym(facet_var)))
-  } else {
+  if (is.null(facet_var)) {
     facet <- NULL
+  } else {
+    facet <- facet_wrap(vars(.data[[facet_var]]))
   }
   
   ggplot(ggplot2::mpg) +
-    geom_point(aes(displ, hwy, colour = !!colour_mapping)) +
+    geom_point(mapping) +
     facet
 }
 ```
@@ -429,22 +419,22 @@ plot_mpg_string <- function(colour_var, facet_var) {
 
 ```{r}
 #' @importFrom ggplot2 ggplot aes vars facet_wrap geom_point labs
-#' @importFrom rlang sym .data
-plot_mpg_string <- function(colour_var, facet_var) {
-  if (colour_var != "<none>") {
-    colour_mapping <- sym(colour_var)
-  } else {
-    colour_mapping <- NULL
+#' @importFrom rlang .data
+plot_mpg <- function(colour_var = "class", facet_var = "drv") {
+  mapping <- aes(.data$displ, .data$hwy, colour = .data[[colour_var]])
+  
+  if (is.null(colour_var)) {
+    mapping$colour <- NULL
   }
   
-  if (facet_var != "<none>") {
-    facet <- facet_wrap(vars(!!sym(facet_var)))
-  } else {
+  if (is.null(facet_var)) {
     facet <- NULL
+  } else {
+    facet <- facet_wrap(vars(.data[[facet_var]]))
   }
   
   ggplot(ggplot2::mpg) +
-    geom_point(aes(.data$displ, .data$hwy, colour = !!colour_mapping)) +
+    geom_point(mapping) +
     facet
 }
 ```
@@ -468,18 +458,18 @@ Set up testing, install [vdiffr](http://vdiffr.r-lib.org/):
 
 ``` r
 # install.packages("vdiffr")
-usethis::use_test("plot-mpg-string")
+usethis::use_test("plot-mpg")
 usethis::use_package("vdiffr", "Suggests")
 ```
 
 ``` r
 # currently, vdiffr requires a context at the top of each file
-context("test-plot-mpg-string")
+context("test-plot-mpg")
 
-test_that("plot_mpg_string() works", {
+test_that("plot_mpg() works", {
   vdiffr::expect_doppelganger(
-    "plot_mpg_string(), defaults",
-    plot_mpg_string()
+    "plot_mpg(), defaults",
+    plot_mpg()
   )
 })
 ```
@@ -507,6 +497,21 @@ vdiffr::manage_cases()
 # Using ggplot2 in packages: testing
 
 ![vdiffr shiny app](images/vdiffr-shiny.png)
+
+---
+class: center, middle, inverse
+
+# Namespace using <br/><br/> `ggplot::function()` <br/><br/> and/or <br/><br/> `#' @importFrom ggplot2 function`
+
+---
+class: center, middle, inverse
+
+# Avoid check problems by using <br/><br/> `.data$var` <br/><br/> within `aes()` and `vars()`
+
+---
+class: center, middle, inverse
+
+# Test using {vdiffr}!
 
 ---
 class: center, middle
