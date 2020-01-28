@@ -1,11 +1,6 @@
 
-.shinyapp {
-  position: relative;
-  left: 0;
-  top: 0;
-  height: 100vh;
-  width: 100vw;
-  border: none;
+.remark-slide-content h1 {
+  font-size: 40px;
 }
 
 .footnote {

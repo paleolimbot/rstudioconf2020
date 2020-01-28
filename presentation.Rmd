@@ -1,6 +1,6 @@
 ---
 title: "Best practices for programming with ggplot2"
-subtitle: '<img src="images/ggplot2.png" style="width: 400px" />'
+subtitle: '<img src="images/ggplot2.png" style="width: 300px" />'
 author: "Dewey Dunnington (@paleolimbot)"
 output:
   xaringan::moon_reader:
