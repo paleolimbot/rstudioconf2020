@@ -130,6 +130,14 @@ plot_mpg("class", "drv")
 # Programming with ggplot2
 
 ```{r, error=TRUE}
+plot_mpg(NULL, "drv")
+```
+
+---
+
+# Programming with ggplot2
+
+```{r, error=TRUE}
 plot_mpg <- function(colour_var, facet_var) {
   ggplot(mpg) +
     geom_point(aes(displ, hwy, colour = .data[[colour_var]])) +
