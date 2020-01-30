@@ -40,7 +40,7 @@ class: center, middle
 
 ![ggplot2 in package vignette](images/vignette.png)
 
-(vignette at [ggplot2.tidyverse.org](https://ggplot2.tidyverse.org/dev/articles/ggplot2-in-packages.html))
+(vignette at [ggplot2.tidyverse.org/dev](https://ggplot2.tidyverse.org/dev/articles/ggplot2-in-packages.html))
 
 ---
 
@@ -71,7 +71,7 @@ facet_var <- "drv"
 
 Mappings and facet specifications use tidy evaluation:
 
-```{r, fig.show='hide'}
+```{r}
 ggplot(mpg) +
   geom_point(aes(displ, hwy, colour = class)) +
   facet_wrap(vars(drv))
@@ -88,7 +88,7 @@ facet_var <- "drv"
 
 Mappings and facet specifications use tidy evaluation:
 
-```{r, fig.show = 'hide'}
+```{r}
 ggplot(mpg) +
   geom_point(aes(displ, hwy, colour = .data[[colour_var]])) +
   facet_wrap(vars(.data[[facet_var]]))
@@ -362,7 +362,7 @@ Duration: 25.2s
   plot_mpg: no visible binding for global variable ‘displ’
   plot_mpg: no visible binding for global variable ‘hwy’
   Undefined global functions or variables:
-    displ hwy
+    .data displ hwy
 
 0 errors ✓ | 0 warnings ✓ | 1 note x
 ```
